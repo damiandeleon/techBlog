@@ -110,4 +110,41 @@ router.get("/post/:id", async (req, res) => {
   }
 });
 
+router.get("/posts-comments", async (req, res) => {
+  try {
+    const postData = await Post.findOne(req.params.id, {
+      where: {
+        id: req.params.id,
+      },
+      attributes: [
+        "id", 
+        "title", 
+        "content", 
+        "created_at"],
+      include: [
+        {
+          model: Comment,
+          attributes: [
+            "id",
+            "text",
+            "post_id",
+            "user_id",
+            "created_at",
+          ],
+          include: {
+            model: User,
+            attributes: ["username"],
+          },
+        },
+      ],
+    });
+
+    const post = postData.get({ plain: true });
+    res.render("posts-comments", { post, logged_in: true });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+
 module.exports = router;
