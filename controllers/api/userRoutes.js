@@ -93,12 +93,13 @@ router.post('/login', async (req, res) => {
     if (!validPassword) {
       res
         .status(400)
-        .json({ message: 'Incorrect password, please try again' });
+        .json({ message: 'Incorrect password.  Please try again' });
       return;
     }
 
     req.session.save(() => {
       req.session.user_id = userData.id;
+      req.session.username = userData.username;
       req.session.logged_in = true;
       
       res.json({ user: userData, message: 'You are now logged in!' });
@@ -109,6 +110,21 @@ router.post('/login', async (req, res) => {
   }
 });
 
+//delete a User 
+router.delete('/:id', async (req, res) => {
+  try {
+    const userData = await User.destroy({
+      where: {
+        id: req.params.id
+      }
+    })
+    res.status(200).json(userData);
+  } catch(er) {
+    res.status(400).json(err);
+  }
+});
+
+//logout
 router.post('/logout', (req, res) => {
   if (req.session.logged_in) {
     req.session.destroy(() => {
