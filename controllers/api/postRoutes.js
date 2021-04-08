@@ -4,7 +4,7 @@ const withAuth = require('../../utils/auth');
 
 //pulling up all posts made (usually upon getting to the site)
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const postData = await Post.findAll({
       attributes: [
@@ -40,7 +40,7 @@ router.get('/', (req, res) => {
 
 //When the user is trying to find a post by id
 
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const postData = await Post.findOne({
       where: {

@@ -2,7 +2,7 @@ const router = require('express').Router();
 const { Post, User, Comment } = require('../../models');
 const withAuth = require('../../utils/auth');
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const commentData = await Comment.findAll({})
 
@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
   }
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const commentData = await Comment.findAll({
       where: {
@@ -39,7 +39,7 @@ router.post('/', withAuth, async (req, res) => {
   }
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
     const commentData = await Comment.update ({
       text: req.body.text
