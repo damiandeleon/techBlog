@@ -3,42 +3,36 @@ const { Comment, User, Post } = require('../models');
 const sequelize = require ('../config/connection');
 
 
-router.get('/', async (req, res) => {
-  try {
-  const postData = await Post.findAll({
-      attributes: [
-        'id',
-        'title',
-        'content',
-        'created_at'
-      ],
-      include: [{
-        model: Comment,
-        attributes: [
-          'id',
-          'text',
-          'post_id',
-          'user_id',
-          'created_at'],
-          include: User,
-          attributes: ['username']
-      },
-      {
-          model: User,
-          attributes: ['username']
-      }],
-    });
-      // Serialize data so the template can read it
-      const posts = postData.map((post) => post.get({ plain: true }));
-
-      // Pass serialized data and session flag into template
-      res.render('homepage', { 
-        posts, 
-        logged_in: req.session.logged_in 
+router.get('/', (req, res) => {
+  Post.findAll({
+          attributes: [
+              'id',
+              'title',
+              'content',
+              'created_at'
+          ],
+          include: [{
+                  model: Comment,
+                  attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
+                  include: {
+                      model: User,
+                      attributes: ['username']
+                  }
+              },
+              {
+                  model: User,
+                  attributes: ['username']
+              }
+          ]
+      })
+      .then(dbPostData => {
+          const posts = dbPostData.map(post => post.get({ plain: true }));
+          res.render('homepage', { posts, loggedIn: req.session.loggedIn });
+      })
+      .catch(err => {
+          console.log(err);
+          res.status(500).json(err);
       });
-  } catch (err) {
-    res.status(500).json(err);
-  };
 });
 
 router.get('/login', (req, res) => {
