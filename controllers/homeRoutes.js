@@ -22,6 +22,10 @@ router.get('/', async (req, res) => {
           'created_at'],
           include: User,
           attributes: ['username']
+      },
+      {
+          model: User,
+          attributes: ['username']
       }],
     });
       // Serialize data so the template can read it

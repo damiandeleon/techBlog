@@ -1,0 +1,17 @@
+[
+    {
+        "text": "This is rad",
+        "user_id": 1,
+        "post_id": 1
+    },
+    {
+        "text": "I can't beleive it's not butter, though!",
+        "user_id": 2,
+        "post_id": 2
+    },
+    {
+        "text": "I dont' know what to post.",
+        "user_id": 3,
+        "post_id": 3
+    }
+]
